@@ -19,7 +19,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 	{
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
-	JMenuItem blur, value, invert, fade, colorize;
+	JMenuItem blur, value, invert, fade, colorize, histogram;
 
 	public class Blur implements ImageAction
 		{
@@ -145,6 +145,10 @@ public class EffectsMenu extends JMenu implements ActionListener
 		colorize = new JMenuItem("Colorize");
 		colorize.setEnabled(false);
 		add(colorize);
+		
+		histogram = new JMenuItem("Histogram");
+		add(histogram);
+		
 		}
 
 	public void actionPerformed(ActionEvent e)
