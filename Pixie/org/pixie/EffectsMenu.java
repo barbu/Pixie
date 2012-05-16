@@ -8,9 +8,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.awt.image.RescaleOp;
+import java.io.IOException;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -179,9 +181,55 @@ public class EffectsMenu extends JMenu implements ActionListener
 			}
 		if (e.getSource() == histogram)
 			{
-			System.out.println("Sunt la histograma");
-			javax.swing.JOptionPane.showMessageDialog(null, "Salvat histograma in histogram.txt");
-			return;
+			BufferedImage temp = pixie.canvas.getRenderImage();
+			// Get RGB
+			int[][] bins=new int[3][256];
+			int height = temp.getHeight();
+      int width = temp.getWidth();
+      
+      java.awt.image.Raster raster = temp.getRaster();
+      for(int i=0; i < width ; i++)
+      {
+          for(int j=0; j < height ; j++)
+          {
+
+                  bins[0][ raster.getSample(i,j, 0) ] ++;
+                  bins[1][ raster.getSample(i,j, 1) ] ++;
+                  bins[2][ raster.getSample(i,j, 2) ] ++;
+          }
+      }
+
+			/* Histogram in bins[3][256];
+		  // TODO Tibi: histogram to photo.
+			// Writing in file
+			 */
+			java.io.FileWriter fstream;
+			try
+			{
+			  java.io.File f = pixie.getFile(true);
+			  if(f == null)
+			  	{
+			  	javax.swing.JOptionPane.showMessageDialog(null, "You haven't choose any path. Aborting!");
+			  	return;
+			  	}
+			  	
+				fstream = new java.io.FileWriter(f.getAbsoluteFile());
+				java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
+	      for(int i = 0;i < 3;i++)
+	      	{
+	      	for(int j = 0;j < 256;j++)
+	      			out.write(bins[i][j]+" ");
+	      			out.write("\n\r\n");
+	      	}
+				//Close the output stream
+				out.close();
 			}
+			catch (IOException e1)
+				{
+				e1.printStackTrace();
+				}
+			javax.swing.JOptionPane.showMessageDialog(null, "Histograma a fost salvata!");
+			return;
 		}
+	}
 	}

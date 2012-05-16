@@ -382,7 +382,7 @@ public class Pixie implements ActionListener
 		return false;
 		}
 
-	private File getFile(final boolean save)
+	public File getFile(final boolean save)
 		{
 		final JFileChooser fc = new JFileChooser((file != null) ? file.getParent() : null);
 		fc.setFileFilter(new FileFilter()
