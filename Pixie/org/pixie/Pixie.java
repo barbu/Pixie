@@ -219,7 +219,7 @@ public class Pixie implements ActionListener
 		BufferedImage bi = null;
 		try
 			{
-			bi = ImageIO.read(Pixie.class.getResource("/test.png"));
+			bi = ImageIO.read(Pixie.class.getResource("/pixie.jpg"));
 			}
 		catch (IOException e)
 			{
