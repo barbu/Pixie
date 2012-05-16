@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.awt.image.RescaleOp;
@@ -21,7 +22,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 	{
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
-	JMenuItem blur, value, invert, fade, colorize, histogram;
+	JMenuItem blur, value, invert, fade, colorize, histogram ,sharpen;
 
 	public class Blur implements ImageAction
 		{
@@ -51,6 +52,27 @@ public class EffectsMenu extends JMenu implements ActionListener
 			}
 		}
 
+		
+	public class Sharpen implements ImageAction
+	{
+	
+
+	public void paint(Graphics g)
+		{
+		Canvas c = pixie.canvas;
+		Graphics2D g2 = (Graphics2D) g;
+		
+    BufferedImage temp = pixie.canvas.getRenderImage();
+    Kernel kernel = new Kernel(3, 3, new float[] { 0,(float)-2/3,0,(float)-2/3,(float)11/3,(float)-2/3,0,(float)-2/3,0 });
+    BufferedImageOp op = new ConvolveOp(kernel);
+    temp = op.filter(temp, null);
+    
+		g2.drawImage(c.getRenderImage(),op,0,0);
+		}
+	}
+
+	
+	
 	public class Value implements ImageAction
 		{
 		public float amount;
@@ -151,7 +173,11 @@ public class EffectsMenu extends JMenu implements ActionListener
 		histogram = new JMenuItem("Histogram");
 		histogram.addActionListener(this);
 		add(histogram);
-		
+
+		sharpen = new JMenuItem("Sharpen");
+		sharpen.addActionListener(this);
+		add(sharpen);
+
 		}
 
 	public void actionPerformed(ActionEvent e)
@@ -231,5 +257,13 @@ public class EffectsMenu extends JMenu implements ActionListener
 			javax.swing.JOptionPane.showMessageDialog(null, "Histograma a fost salvata!");
 			return;
 		}
+		
+		if (e.getSource() == sharpen)
+			{
+   			applyAction(new Sharpen());
+		    	return;
+
+		  }
+		
 	}
 	}
