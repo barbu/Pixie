@@ -37,7 +37,7 @@ import javax.swing.filechooser.FileFilter;
 public class Pixie implements ActionListener
 	{
 	private final JFrame frame;
-	private JButton bUndo, bZoomIn, bZoomOut;
+	private JButton bUndo, bZoomIn, bZoomOut, bRotate90Right, bRotate90Left, bMirror;
 	private JToggleButton bGrid;
 	private final JScrollPane scroll;
 
@@ -125,6 +125,10 @@ public class Pixie implements ActionListener
 		bZoomOut = addButton(toolBar,new JButton(getIcon("zoom-out")));
 		bZoomIn = addButton(toolBar,new JButton(getIcon("zoom-in")));
 
+		bRotate90Right = addButton(toolBar,new JButton(getIcon("rotateright")));
+		bRotate90Left = addButton(toolBar,new JButton(getIcon("rotateleft")));
+		bMirror = addButton(toolBar,new JButton(getIcon("mirror")));
+		
 		return toolBar;
 		}
 
@@ -209,13 +213,12 @@ public class Pixie implements ActionListener
 
 	public static void main(String[] args)
 		{
-		// java6u10 regression causes graphical xor to be very slow
-		System.setProperty("sun.java2d.d3d","false"); //$NON-NLS-1$ //$NON-NLS-2$
+		System.setProperty("sun.java2d.d3d","false");
 
 		BufferedImage bi = null;
 		try
 			{
-			bi = ImageIO.read(Pixie.class.getResource("/test.png"));
+			bi = ImageIO.read(Pixie.class.getResource("/pixie.jpg"));
 			}
 		catch (IOException e)
 			{
@@ -245,6 +248,26 @@ public class Pixie implements ActionListener
 				}
 			return;
 			}
+		if (e.getSource() == bRotate90Right)
+			{
+			System.out.println("blabla");
+			canvas.rotate90Right();
+			return;
+			}
+		if (e.getSource() == bRotate90Left)
+			{
+			System.out.println("blabla");
+			canvas.rotate90Left();
+			return;
+			}
+		
+		if (e.getSource() == bMirror)
+			{
+			System.out.println("blabla");
+			canvas.mirror();
+			return;
+			}
+		
 		if (e.getSource() == bGrid)
 			{
 			canvas.isGridDrawn = bGrid.isSelected();
@@ -309,7 +332,7 @@ public class Pixie implements ActionListener
 	public void doClose()
 		{
 		if (!hasChanged()) System.exit(0);
-		int c = JOptionPane.showConfirmDialog(frame,"OMG DO U WANT TO SAVE?");
+		int c = JOptionPane.showConfirmDialog(frame,"Do you want to save changes?");
 		if (c == JOptionPane.CANCEL_OPTION) return;
 		if (c == JOptionPane.OK_OPTION) doSave(false);
 		System.exit(0);

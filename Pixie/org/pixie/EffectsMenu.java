@@ -8,8 +8,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.awt.image.RescaleOp;
@@ -22,7 +23,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 	{
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
-	JMenuItem blur, value, invert, fade, colorize, histogram ,sharpen;
+	JMenuItem blur, value, invert, fade, colorize, histogram, shear;
 
 	public class Blur implements ImageAction
 		{
@@ -52,27 +53,6 @@ public class EffectsMenu extends JMenu implements ActionListener
 			}
 		}
 
-		
-	public class Sharpen implements ImageAction
-	{
-	
-
-	public void paint(Graphics g)
-		{
-		Canvas c = pixie.canvas;
-		Graphics2D g2 = (Graphics2D) g;
-		
-    BufferedImage temp = pixie.canvas.getRenderImage();
-    Kernel kernel = new Kernel(3, 3, new float[] { 0,(float)-2/3,0,(float)-2/3,(float)11/3,(float)-2/3,0,(float)-2/3,0 });
-    BufferedImageOp op = new ConvolveOp(kernel);
-    temp = op.filter(temp, null);
-    
-		g2.drawImage(c.getRenderImage(),op,0,0);
-		}
-	}
-
-	
-	
 	public class Value implements ImageAction
 		{
 		public float amount;
@@ -173,11 +153,11 @@ public class EffectsMenu extends JMenu implements ActionListener
 		histogram = new JMenuItem("Histogram");
 		histogram.addActionListener(this);
 		add(histogram);
-
-		sharpen = new JMenuItem("Sharpen");
-		sharpen.addActionListener(this);
-		add(sharpen);
-
+		
+		shear = new JMenuItem("Shear");
+		shear.addActionListener(this);
+		add(shear);
+		
 		}
 
 	public void actionPerformed(ActionEvent e)
@@ -199,6 +179,20 @@ public class EffectsMenu extends JMenu implements ActionListener
 			applyAction(new Invert());
 			return;
 			}
+		if (e.getSource() == shear)
+			{
+			AffineTransform tx = new AffineTransform();
+			Integer ox = IntegerDialog.getInteger("Ox (-5 , 5)",-5,5,0,3);
+			Integer oy = IntegerDialog.getInteger("Oy (-5 , 5)",-5,5,0,3);
+			tx.shear((float) ox / 10, (float) oy / 10);
+			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+			BufferedImage tempBufferedImage = op.filter(pixie.canvas.getRenderImage(), null);
+			tempBufferedImage = op.filter(tempBufferedImage, null);
+			pixie.canvas.setImage(tempBufferedImage);
+			System.out.println("test");
+			return;
+			}
+		
 		if (e.getSource() == fade)
 			{
 			Integer integer = IntegerDialog.getInteger("Fade amount (0-256)",0,256,128,64);
@@ -257,13 +251,5 @@ public class EffectsMenu extends JMenu implements ActionListener
 			javax.swing.JOptionPane.showMessageDialog(null, "Histograma a fost salvata!");
 			return;
 		}
-		
-		if (e.getSource() == sharpen)
-			{
-   			applyAction(new Sharpen());
-		    	return;
-
-		  }
-		
 	}
 	}
