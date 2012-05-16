@@ -176,5 +176,9 @@ public class EffectsMenu extends JMenu implements ActionListener
 			if (integer != null) applyAction(new Fade(Color.BLACK,((float) integer) / 256.0f));
 			return;
 			}
+		if (e.getSource() == histogram)
+			{
+			System.out.println("aa");
+			}
 		}
 	}
