@@ -147,6 +147,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 		add(colorize);
 		
 		histogram = new JMenuItem("Histogram");
+		histogram.addActionListener(this);
 		add(histogram);
 		
 		}
@@ -178,7 +179,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 			}
 		if (e.getSource() == histogram)
 			{
-			System.out.println("aa");
+			System.out.println("Sunt la histograma");
 			}
 		}
 	}
