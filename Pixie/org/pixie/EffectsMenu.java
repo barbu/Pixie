@@ -23,7 +23,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 	{
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
-	JMenuItem blur, value, invert, fade, colorize, histogram, shear;
+	JMenuItem blur, value, invert, fade, colorize, histogram, shear, test;
 
 	public class Blur implements ImageAction
 		{
@@ -149,15 +149,15 @@ public class EffectsMenu extends JMenu implements ActionListener
 		colorize = new JMenuItem("Colorize");
 		colorize.setEnabled(false);
 		add(colorize);
-		
+
 		histogram = new JMenuItem("Histogram");
 		histogram.addActionListener(this);
 		add(histogram);
-		
+
 		shear = new JMenuItem("Shear");
 		shear.addActionListener(this);
 		add(shear);
-		
+
 		}
 
 	public void actionPerformed(ActionEvent e)
@@ -184,15 +184,15 @@ public class EffectsMenu extends JMenu implements ActionListener
 			AffineTransform tx = new AffineTransform();
 			Integer ox = IntegerDialog.getInteger("Ox (-5 , 5)",-5,5,0,3);
 			Integer oy = IntegerDialog.getInteger("Oy (-5 , 5)",-5,5,0,3);
-			tx.shear((float) ox / 10, (float) oy / 10);
-			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
-			BufferedImage tempBufferedImage = op.filter(pixie.canvas.getRenderImage(), null);
-			tempBufferedImage = op.filter(tempBufferedImage, null);
+			tx.shear((float) ox / 10,(float) oy / 10);
+			AffineTransformOp op = new AffineTransformOp(tx,AffineTransformOp.TYPE_BILINEAR);
+			BufferedImage tempBufferedImage = op.filter(pixie.canvas.getRenderImage(),null);
+			tempBufferedImage = op.filter(tempBufferedImage,null);
 			pixie.canvas.setImage(tempBufferedImage);
 			System.out.println("test");
 			return;
 			}
-		
+
 		if (e.getSource() == fade)
 			{
 			Integer integer = IntegerDialog.getInteger("Fade amount (0-256)",0,256,128,64);
@@ -203,53 +203,53 @@ public class EffectsMenu extends JMenu implements ActionListener
 			{
 			BufferedImage temp = pixie.canvas.getRenderImage();
 			// Get RGB
-			int[][] bins=new int[3][256];
+			int[][] bins = new int[3][256];
 			int height = temp.getHeight();
-      int width = temp.getWidth();
-      
-      java.awt.image.Raster raster = temp.getRaster();
-      for(int i=0; i < width ; i++)
-      {
-          for(int j=0; j < height ; j++)
-          {
+			int width = temp.getWidth();
 
-                  bins[0][ raster.getSample(i,j, 0) ] ++;
-                  bins[1][ raster.getSample(i,j, 1) ] ++;
-                  bins[2][ raster.getSample(i,j, 2) ] ++;
-          }
-      }
+			java.awt.image.Raster raster = temp.getRaster();
+			for (int i = 0; i < width; i++)
+				{
+				for (int j = 0; j < height; j++)
+					{
+
+					bins[0][raster.getSample(i,j,0)]++;
+					bins[1][raster.getSample(i,j,1)]++;
+					bins[2][raster.getSample(i,j,2)]++;
+					}
+				}
 
 			/* Histogram in bins[3][256];
-		  // TODO Tibi: histogram to photo.
+			// TODO Tibi: histogram to photo.
 			// Writing in file
 			 */
 			java.io.FileWriter fstream;
 			try
-			{
-			  java.io.File f = pixie.getFile(true);
-			  if(f == null)
-			  	{
-			  	javax.swing.JOptionPane.showMessageDialog(null, "You haven't choose any path. Aborting!");
-			  	return;
-			  	}
-			  	
+				{
+				java.io.File f = pixie.getFile(true);
+				if (f == null)
+					{
+					javax.swing.JOptionPane.showMessageDialog(null,"You haven't choose any path. Aborting!");
+					return;
+					}
+
 				fstream = new java.io.FileWriter(f.getAbsoluteFile());
 				java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
-	      for(int i = 0;i < 3;i++)
-	      	{
-	      	for(int j = 0;j < 256;j++)
-	      			out.write(bins[i][j]+" ");
-	      			out.write("\n\r\n");
-	      	}
+				for (int i = 0; i < 3; i++)
+					{
+					for (int j = 0; j < 256; j++)
+						out.write(bins[i][j] + " ");
+					out.write("\n\r\n");
+					}
 				//Close the output stream
 				out.close();
-			}
+				}
 			catch (IOException e1)
 				{
 				e1.printStackTrace();
 				}
-			javax.swing.JOptionPane.showMessageDialog(null, "Histograma a fost salvata!");
+			javax.swing.JOptionPane.showMessageDialog(null,"Histograma a fost salvata!");
 			return;
+			}
 		}
-	}
 	}
