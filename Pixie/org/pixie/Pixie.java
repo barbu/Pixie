@@ -47,7 +47,7 @@ public class Pixie implements ActionListener
 	private JMenuBar menuBar;
 	private JToolBar toolBar;
 	private final JPanel toolPanel;
-	public final String TITLE = "Easy Image Editor ";
+	public final String TITLE = "Pixie ";
 
 	public Pixie(BufferedImage image)
 		{
