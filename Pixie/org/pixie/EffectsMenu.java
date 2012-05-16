@@ -25,7 +25,6 @@ public class EffectsMenu extends JMenu implements ActionListener
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
 	JMenuItem blur, value, invert, fade, colorize, histogram, shear, sharpen;
-	JMenuItem test2;
 	
 	public class Blur implements ImageAction
 		{
