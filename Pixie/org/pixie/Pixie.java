@@ -332,7 +332,7 @@ public class Pixie implements ActionListener
 	public void doClose()
 		{
 		if (!hasChanged()) System.exit(0);
-		int c = JOptionPane.showConfirmDialog(frame,"OMG DO U WANT TO SAVE?");
+		int c = JOptionPane.showConfirmDialog(frame,"Do you want to save changes?");
 		if (c == JOptionPane.CANCEL_OPTION) return;
 		if (c == JOptionPane.OK_OPTION) doSave(false);
 		System.exit(0);
