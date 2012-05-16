@@ -180,6 +180,8 @@ public class EffectsMenu extends JMenu implements ActionListener
 		if (e.getSource() == histogram)
 			{
 			System.out.println("Sunt la histograma");
+			javax.swing.JOptionPane.showMessageDialog(null, "Salvat histograma in histogram.txt");
+			return;
 			}
 		}
 	}
