@@ -107,6 +107,28 @@ public class Canvas extends JLabel
 			updateUI();
 			}
 		}
+	
+	public void rotate90Right()
+		{
+			BufferedImage temp = new BufferedImage(raster.getWidth(), raster.getHeight(), raster.getType());
+			for(int i=0; i<raster.getWidth(); i++)
+        for(int j=0; j<raster.getHeight(); j++)
+        	temp.setRGB(raster.getHeight()-1-j, raster.getWidth()-1-i, raster.getRGB(i, j));
+			raster = temp;
+			redrawGrid();
+			updateUI();
+		}
+	
+	public void rotate90Left()
+		{
+			BufferedImage temp = new BufferedImage(raster.getWidth(), raster.getHeight(), raster.getType());
+			for(int i=0; i<raster.getWidth(); i++)
+        for(int j=0; j<raster.getHeight(); j++)
+        	temp.setRGB(j, i, raster.getRGB(i, j));
+			raster = temp;
+			redrawGrid();
+			updateUI();
+		}
 
 	public void zoomOut()
 		{
