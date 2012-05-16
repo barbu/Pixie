@@ -37,7 +37,7 @@ import javax.swing.filechooser.FileFilter;
 public class Pixie implements ActionListener
 	{
 	private final JFrame frame;
-	private JButton bUndo, bZoomIn, bZoomOut, bRotate90Right, bRotate90Left;
+	private JButton bUndo, bZoomIn, bZoomOut, bRotate90Right, bRotate90Left, bMirror;
 	private JToggleButton bGrid;
 	private final JScrollPane scroll;
 
@@ -127,6 +127,7 @@ public class Pixie implements ActionListener
 
 		bRotate90Right = addButton(toolBar,new JButton());
 		bRotate90Left = addButton(toolBar,new JButton());
+		bMirror = addButton(toolBar,new JButton());
 		
 		return toolBar;
 		}
@@ -260,6 +261,14 @@ public class Pixie implements ActionListener
 			canvas.rotate90Left();
 			return;
 			}
+		
+		if (e.getSource() == bMirror)
+			{
+			System.out.println("blabla");
+			canvas.mirror();
+			return;
+			}
+		
 		if (e.getSource() == bGrid)
 			{
 			canvas.isGridDrawn = bGrid.isSelected();
