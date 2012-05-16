@@ -24,7 +24,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 	{
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
-	JMenuItem blur, value, invert, fade, colorize, histogram, shear, sharpen;
+	JMenuItem blur, value, invert, fade, colorize, histogram, shear, sharpen,emboss,mean_removal,smooth;
 	
 	public class Blur implements ImageAction
 		{
@@ -54,6 +54,77 @@ public class EffectsMenu extends JMenu implements ActionListener
 			}
 		}
 
+	public class Mean_Removal implements ImageAction
+	{
+	public int amount;
+
+	
+	public void paint(Graphics g)
+		{
+		Canvas c = pixie.canvas;
+		Graphics2D g2 = (Graphics2D) g;
+
+  BufferedImage temp = pixie.canvas.getRenderImage();
+
+  Kernel kernel = new Kernel(3, 3, new float[] { -1, -1, -1, -1, 9, -1, -1, -1, -1 });
+
+	BufferedImageOp op = new  ConvolveOp(kernel);
+	temp = op.filter(temp, null);
+	    
+	g2.drawImage(c.getRenderImage(),op,0,0);
+		}
+	}
+	
+	public class Smooth implements ImageAction
+	{
+	public int amount;
+
+	
+	public void paint(Graphics g)
+		{
+			Canvas c = pixie.canvas;
+			Graphics2D g2 = (Graphics2D) g;
+
+	  BufferedImage temp = pixie.canvas.getRenderImage();
+	
+	  Kernel kernel = new  Kernel(3, 3, new  float[] { (float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9 });
+
+		BufferedImageOp op = new  ConvolveOp(kernel);
+		temp = op.filter(temp, null);
+		    
+		g2.drawImage(c.getRenderImage(),op,0,0);
+		
+		
+		
+		}
+	}
+	
+	public class Emboss implements ImageAction
+	{
+	public int amount;
+
+	
+	public void paint(Graphics g)
+		{
+			Canvas c = pixie.canvas;
+			Graphics2D g2 = (Graphics2D) g;
+
+	  BufferedImage temp = pixie.canvas.getRenderImage();
+	
+	  Kernel kernel = new Kernel(3, 3,
+		    new float[] {
+		        -2, 0, 0,
+		        0, 1, 0,
+		        0, 0, 2});
+
+		BufferedImageOp op = new  ConvolveOp(kernel);
+		temp = op.filter(temp, null);
+		    
+		g2.drawImage(c.getRenderImage(),op,0,0);
+	
+		}
+	}
+	
 	public class Value implements ImageAction
 		{
 		public float amount;
@@ -183,6 +254,18 @@ public class EffectsMenu extends JMenu implements ActionListener
 		shear.addActionListener(this);
 		add(shear);
 
+		smooth = new JMenuItem("Smooth");
+		smooth.addActionListener(this);
+		add(smooth);
+		
+		emboss = new JMenuItem("Emboss");
+		emboss.addActionListener(this);
+		add(emboss);
+
+		mean_removal = new JMenuItem("Mean_Removal");
+		mean_removal.addActionListener(this);
+		add(mean_removal);
+		
 		}
 
 	public void actionPerformed(ActionEvent e)
@@ -193,6 +276,23 @@ public class EffectsMenu extends JMenu implements ActionListener
 			if (integer != null) applyAction(new Blur(integer));
 			return;
 			}
+		
+		if (e.getSource() == smooth)
+			{
+			applyAction(new Smooth());
+			return;
+			}
+		if (e.getSource() == emboss)
+			{
+			applyAction(new Emboss());
+			return;
+			}
+		if (e.getSource() == mean_removal)
+			{
+			applyAction(new Mean_Removal());
+			return;
+			}
+		
 		if (e.getSource() == value)
 			{
 			Integer integer = IntegerDialog.getInteger("Value",-10,10,0,5);
