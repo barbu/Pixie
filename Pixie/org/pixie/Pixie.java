@@ -125,9 +125,9 @@ public class Pixie implements ActionListener
 		bZoomOut = addButton(toolBar,new JButton(getIcon("zoom-out")));
 		bZoomIn = addButton(toolBar,new JButton(getIcon("zoom-in")));
 
-		bRotate90Right = addButton(toolBar,new JButton());
-		bRotate90Left = addButton(toolBar,new JButton());
-		bMirror = addButton(toolBar,new JButton());
+		bRotate90Right = addButton(toolBar,new JButton(getIcon("rotateright")));
+		bRotate90Left = addButton(toolBar,new JButton(getIcon("rotateleft")));
+		bMirror = addButton(toolBar,new JButton(getIcon("mirror")));
 		
 		return toolBar;
 		}
@@ -213,8 +213,7 @@ public class Pixie implements ActionListener
 
 	public static void main(String[] args)
 		{
-		// java6u10 regression causes graphical xor to be very slow
-		System.setProperty("sun.java2d.d3d","false"); //$NON-NLS-1$ //$NON-NLS-2$
+		System.setProperty("sun.java2d.d3d","false");
 
 		BufferedImage bi = null;
 		try
