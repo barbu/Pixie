@@ -24,7 +24,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 	{
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
-	JMenuItem blur, value, invert, fade, colorize, histogram, shear, sharpen;
+	JMenuItem blur, value, invert, fade, colorize, histogram, shear, sharpen, test;
 
 	public class Blur implements ImageAction
 		{
@@ -115,28 +115,26 @@ public class EffectsMenu extends JMenu implements ActionListener
 			}
 		}
 
-
 	public class Sharpen implements ImageAction
-	{
-	
-
-	public void paint(Graphics g)
 		{
-		Canvas c = pixie.canvas;
-		Graphics2D g2 = (Graphics2D) g;
-		
-    BufferedImage temp = pixie.canvas.getRenderImage();
-    Kernel kernel = new Kernel(3, 3, new float[] { 0,(float)-2/3,0,(float)-2/3,(float)11/3,
 
-(float)-2/3,0,(float)-2/3,0 });
-    BufferedImageOp op = new ConvolveOp(kernel);
-    temp = op.filter(temp, null);
-    
-		g2.drawImage(c.getRenderImage(),op,0,0);
+		public void paint(Graphics g)
+			{
+			Canvas c = pixie.canvas;
+			Graphics2D g2 = (Graphics2D) g;
+
+			BufferedImage temp = pixie.canvas.getRenderImage();
+			Kernel kernel = new Kernel(3,3,new float[] { 0,(float) -2 / 3,0,(float) -2 / 3,
+					(float) 11 / 3,
+
+					(float) -2 / 3,0,(float) -2 / 3,0 });
+			BufferedImageOp op = new ConvolveOp(kernel);
+			temp = op.filter(temp,null);
+
+			g2.drawImage(c.getRenderImage(),op,0,0);
+			}
 		}
-	}
 
-	
 	public void applyAction(ImageAction act)
 		{
 		Canvas c = pixie.canvas;
@@ -181,7 +179,6 @@ public class EffectsMenu extends JMenu implements ActionListener
 		sharpen.addActionListener(this);
 		add(sharpen);
 
-		
 		shear = new JMenuItem("Shear");
 		shear.addActionListener(this);
 		add(shear);
@@ -227,13 +224,13 @@ public class EffectsMenu extends JMenu implements ActionListener
 			if (integer != null) applyAction(new Fade(Color.BLACK,((float) integer) / 256.0f));
 			return;
 			}
-		
+
 		if (e.getSource() == sharpen)
 			{
 			applyAction(new Sharpen());
 			return;
 			}
-		
+
 		if (e.getSource() == histogram)
 			{
 			BufferedImage temp = pixie.canvas.getRenderImage();
