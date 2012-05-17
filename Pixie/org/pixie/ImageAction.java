@@ -253,4 +253,40 @@ public interface ImageAction {
 			return source.getRGB(p.x, p.y) == targetRGB;
 		}
 	}
+	
+	public static class CropAction implements ImageAction
+	{
+	public Color out, in;
+	public Point p1, p2;
+	public boolean crop;
+	public BufferedImage bi;
+	public int x, y, h, w;
+	public Canvas canvas;
+	
+	public CropAction(Point p, Color out, Color in, BufferedImage bi, Canvas c, boolean crop)
+		{
+		this.out = out;
+		this.in = in;
+		p1 = p;
+		canvas = c;
+		p2 = p;
+		this.bi = bi;
+		x = y = w = h = 0;
+		this.crop = crop;
+		}
+	
+	public void paint(Graphics g)
+		{
+		if ( crop != false) {
+				Rectangle r = new Rectangle(p1);
+				r.add(p2);
+				g.setColor(out);
+				g.drawRect(r.x,r.y,r.width,r.height);
+		}
+		else {
+			BufferedImage cropped = bi.getSubimage(x,y,w,h);
+			canvas.setImage(cropped);
+		}
+		}
+	}
 }

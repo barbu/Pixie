@@ -5,7 +5,11 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
+import javax.swing.JOptionPane;
+
+import org.pixie.ImageAction.CropAction;
 import org.pixie.ImageAction.FillAction;
 import org.pixie.ImageAction.LineAction;
 import org.pixie.ImageAction.PointAction;
@@ -192,4 +196,75 @@ public interface Tool {
 		public void mouseMove(MouseEvent e, Canvas c, Palette p, boolean drag) { // nefolosit
 		}
 	}
+	
+	public static class CropTool extends GenericTool<CropAction>
+	{
+			long mouseTime;
+			int button;
+		boolean dragging;
+		int x, y;
+		
+		public void mousePress(MouseEvent e, Canvas canvas, Palette p)
+		{ 
+		    if (active != null)
+					{
+					if (e.getButton() == button)
+						finish(canvas,p);
+					else
+						cancel(canvas);
+					return;
+					}
+				if (!isValid(e,canvas,p)) return;
+				button = e.getButton();
+				mouseTime = e.getWhen();
+				Color c1 = p.getLeft();
+				Color c2 = p.getRight();
+				if (button != MouseEvent.BUTTON1)
+					{
+					c1 = c2;
+					c2 = p.getLeft();
+					}
+		
+		  dragging = true;
+		  x = e.getPoint().x;
+		  y = e.getPoint().y;
+				canvas.active = active = new CropAction(e.getPoint(),c1, c2, canvas.getRenderImage(), canvas, dragging);
+				canvas.repaint();
+		
+		}
+		
+		public void mouseRelease(MouseEvent e, Canvas canvas, Palette pal)
+		{
+			    if (e.getWhen() - mouseTime < 200) return;
+			
+					if (active != null) active.p2 = e.getPoint();
+					Color c1 = pal.getLeft();
+					Color c2 = pal.getRight();
+		    dragging = false;
+		    int c = JOptionPane.showConfirmDialog(canvas,
+					"Do you really want to crop this image?");
+			if (c == JOptionPane.CANCEL_OPTION || c == JOptionPane.NO_OPTION){
+				cancel(canvas);
+				return;
+			}
+			if (c == JOptionPane.OK_OPTION){
+				cancel(canvas);
+				BufferedImage imag = canvas.getRenderImage();
+				canvas.setImage(imag.getSubimage(x,y,e.getPoint().x - x,e.getPoint().y - y));
+			}
+		    return;
+		}
+		
+		public void mouseMove(MouseEvent e, Canvas canvas, Palette p, boolean drag)
+		{
+				if (active != null && !active.p2.equals(e.getPoint()) && dragging != false)
+					{
+					Rectangle r = new Rectangle(active.p2); //previous value
+					active.p2 = e.getPoint();
+					r.add(active.p1);
+					r.add(active.p2);
+					canvas.repaint(r);
+					}
+		}
+		}
 }

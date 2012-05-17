@@ -13,6 +13,7 @@ import javax.swing.JToggleButton;
 
 import org.pixie.Pixie.ToolDelegate;
 import org.pixie.Tool.FillTool;
+import org.pixie.Tool.CropTool;
 import org.pixie.Tool.LineTool;
 import org.pixie.Tool.PointTool;
 import org.pixie.Tool.RectangleTool;
@@ -39,7 +40,9 @@ public class ToolPanel extends JPanel implements ActionListener {
 				"Rect - draws a filled rectangle", new RectangleTool()));
 		addButton(new ToolButton(Pixie.getIcon("color-fill"),
 				"Fill - flood-fills a region", new FillTool()));
-
+		addButton(new ToolButton(Pixie.getIcon("cut"),"Crop image",
+				new CropTool()));
+		
 		sel.doClick();
 	}
 
