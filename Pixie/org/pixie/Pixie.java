@@ -48,6 +48,7 @@ public class Pixie implements ActionListener {
 	private JToolBar toolBar;
 	private final JPanel toolPanel;
 	public final String TITLE = "Pixie ";
+	public EffectsMenu effectsMenu;
 
 	public Pixie(BufferedImage image) {
 		if (image == null)
@@ -97,11 +98,21 @@ public class Pixie implements ActionListener {
 		addMenuItem(fm, "Save", getIcon("save"));
 		addMenuItem(fm, "Save As", getIcon("save-as"));
 		addMenuItem(fm, "Exit", getIcon("cancel"));
-
-		menuBar.add(new EffectsMenu(this));
+		effectsMenu=new EffectsMenu(this);
+		//setEffectsMenu();
+		menuBar.add(effectsMenu);
 		return menuBar;
 	}
 
+	public void setEffectsMenu(EffectsMenu effectsMenu)
+	{
+		this.effectsMenu=effectsMenu;
+	}
+	
+	public EffectsMenu getEffectsMenu()
+	{
+		return this.effectsMenu;
+	}
 	public void addMenuItem(JMenu menu, String name, ImageIcon icon) {
 		JMenuItem mi = new JMenuItem(name, icon);
 		mi.setActionCommand(name);
@@ -233,12 +244,12 @@ public class Pixie implements ActionListener {
 		}
 		if (e.getSource() == bRotate90Right) {
 			System.out.println("blabla");
-			canvas.rotate90Right();
+			this.effectsMenu.efectDinMeniuRotateRight();
 			return;
 		}
 		if (e.getSource() == bRotate90Left) {
 			System.out.println("blabla");
-			canvas.rotate90Left();
+			this.effectsMenu.efectDinMeniuRotateLeft();
 			return;
 		}
 

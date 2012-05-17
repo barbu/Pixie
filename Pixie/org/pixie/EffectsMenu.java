@@ -69,6 +69,38 @@ public class EffectsMenu extends JMenu implements ActionListener {
 			g2.drawImage(c.getRenderImage(), op, 0, 0);
 		}
 	}
+	
+	public class Rotate90Right implements ImageAction {
+		public void paint(Graphics g) {
+			Canvas c = pixie.canvas;
+			Graphics2D g2 = (Graphics2D) g;
+			
+			BufferedImage temp = pixie.canvas.getRenderImage();
+			
+			BufferedImageOp op  =new AffineTransformOp(AffineTransform.getRotateInstance(
+			          Math.PI / 2, 0+temp.getHeight()/2, 0+temp.getWidth()/2),
+			          AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			temp = op.filter(temp, null);
+			g2.drawImage(c.getRenderImage(), op, 0, 0);
+		}
+		
+	}
+	
+	public class Rotate90Left implements ImageAction {
+		public void paint(Graphics g) {
+			Canvas c = pixie.canvas;
+			Graphics2D g2 = (Graphics2D) g;
+			
+			BufferedImage temp = pixie.canvas.getRenderImage();
+			
+			BufferedImageOp op  =new AffineTransformOp(AffineTransform.getRotateInstance(
+			          -Math.PI / 2, 0+temp.getHeight()/2, 0+temp.getWidth()/2),
+			          AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			temp = op.filter(temp, null);
+			g2.drawImage(c.getRenderImage(), op, 0, 0);
+		}
+		
+	}
 
 	public class Smooth implements ImageAction {
 		public int amount;
@@ -236,6 +268,18 @@ public class EffectsMenu extends JMenu implements ActionListener {
 		mean_removal.addActionListener(this);
 		add(mean_removal);
 
+	}
+	
+	public void efectDinMeniuRotateRight()
+	{
+		 applyAction(new Rotate90Right());
+		 return;
+	}
+	
+	public void efectDinMeniuRotateLeft()
+	{
+		 applyAction(new Rotate90Left());
+		 return;
 	}
 
 	public void actionPerformed(ActionEvent e) {
