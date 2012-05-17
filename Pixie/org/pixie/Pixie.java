@@ -243,19 +243,16 @@ public class Pixie implements ActionListener {
 			return;
 		}
 		if (e.getSource() == bRotate90Right) {
-			System.out.println("blabla");
 			this.effectsMenu.efectDinMeniuRotateRight();
 			return;
 		}
 		if (e.getSource() == bRotate90Left) {
-			System.out.println("blabla");
 			this.effectsMenu.efectDinMeniuRotateLeft();
 			return;
 		}
 
 		if (e.getSource() == bMirror) {
-			System.out.println("blabla");
-			canvas.mirror();
+			this.effectsMenu.efectMirror();
 			return;
 		}
 

@@ -100,17 +100,6 @@ public class Canvas extends JLabel {
 		}
 	}
 
-	public void mirror() {
-		BufferedImage temp = new BufferedImage(raster.getWidth(),
-				raster.getHeight(), raster.getType());
-		for (int i = 0; i < raster.getWidth(); i++)
-			for (int j = 0; j < raster.getHeight(); j++)
-				temp.setRGB(raster.getWidth() - 1 - i, j, raster.getRGB(i, j));
-		raster = temp;
-		redrawGrid();
-		updateUI();
-	}
-
 	public void zoomOut() {
 		if (zoom > 1) {
 			zoom /= 2;
