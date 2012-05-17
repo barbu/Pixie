@@ -17,65 +17,58 @@ import org.pixie.Tool.LineTool;
 import org.pixie.Tool.PointTool;
 import org.pixie.Tool.RectangleTool;
 
-public class ToolPanel extends JPanel implements ActionListener
-	{
+public class ToolPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	protected ToolDelegate del;
 	protected JPanel toolGrid;
 	protected ButtonGroup bg = new ButtonGroup();
 
-	public ToolPanel(ToolDelegate del)
-		{
+	public ToolPanel(ToolDelegate del) {
 		super();
 		this.del = del;
 
-		add(toolGrid = new JPanel(new GridLayout(0,2)));
+		add(toolGrid = new JPanel(new GridLayout(0, 2)));
 
 		AbstractButton sel;
 
-		addButton(new ToolButton(Pixie.getIcon("pencil"),"Pencil - draws freehand strokes",
-				new PointTool()));
-		sel = addButton(new ToolButton(Pixie.getIcon("line"),"Line - draws a straight line",
-				new LineTool()));
-		addButton(new ToolButton(Pixie.getIcon("rect"),"Rect - draws a filled rectangle",
-				new RectangleTool()));
-		addButton(new ToolButton(Pixie.getIcon("color-fill"),"Fill - flood-fills a region",
-				new FillTool()));
+		addButton(new ToolButton(Pixie.getIcon("pencil"),
+				"Pencil - draws freehand strokes", new PointTool()));
+		sel = addButton(new ToolButton(Pixie.getIcon("line"),
+				"Line - draws a straight line", new LineTool()));
+		addButton(new ToolButton(Pixie.getIcon("rect"),
+				"Rect - draws a filled rectangle", new RectangleTool()));
+		addButton(new ToolButton(Pixie.getIcon("color-fill"),
+				"Fill - flood-fills a region", new FillTool()));
 
 		sel.doClick();
-		}
+	}
 
-	public <K extends AbstractButton>K addButton(K b)
-		{
+	public <K extends AbstractButton> K addButton(K b) {
 		toolGrid.add(b);
 		bg.add(b);
 		b.addActionListener(this);
 		return b;
-		}
+	}
 
-	public class ToolButton extends JToggleButton
-		{
+	public class ToolButton extends JToggleButton {
 		private static final long serialVersionUID = 1L;
 
 		public final Tool tool;
 
-		public ToolButton(ImageIcon ico, Tool t)
-			{
-			this(ico,null,t);
-			}
+		public ToolButton(ImageIcon ico, Tool t) {
+			this(ico, null, t);
+		}
 
-		public ToolButton(ImageIcon ico, String tip, Tool t)
-			{
+		public ToolButton(ImageIcon ico, String tip, Tool t) {
 			super(ico);
 			tool = t;
 			setToolTipText(tip);
-			setPreferredSize(new Dimension(32,32));
-			}
-		}
-
-	public void actionPerformed(ActionEvent e)
-		{
-		del.setTool(((ToolButton) e.getSource()).tool);
-		return;
+			setPreferredSize(new Dimension(32, 32));
 		}
 	}
+
+	public void actionPerformed(ActionEvent e) {
+		del.setTool(((ToolButton) e.getSource()).tool);
+		return;
+	}
+}
