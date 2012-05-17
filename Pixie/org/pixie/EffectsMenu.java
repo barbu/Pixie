@@ -24,7 +24,7 @@ public class EffectsMenu extends JMenu implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
 	JMenuItem blur, value, invert, fade, histogram, shear, sharpen, emboss,
-			mean_removal, smooth;
+			mean_removal, smooth, gamaCor;
 
 	public class Blur implements ImageAction {
 		public int amount;
@@ -51,6 +51,52 @@ public class EffectsMenu extends JMenu implements ActionListener {
 		}
 	}
 
+	public class GamaCorrection implements ImageAction {
+		double gamma;
+		public GamaCorrection(double gamma1)
+		{
+		gamma = gamma1;
+		}
+	
+   public void paint( Graphics g) 
+	{
+	   Graphics2D g2 = (Graphics2D) g;
+	   BufferedImage gamma_cor = pixie.canvas.getRenderImage();
+   
+	
+	    int alpha, red, green, blue;
+	    int newPixel;
+	
+	    double gamma_new = 1 / gamma;
+	
+	    //BufferedImage gamma_cor = new BufferedImage(original.getWidth(), original.getHeight(), original.getType());
+	    int width=gamma_cor.getWidth();
+	    int height=gamma_cor.getHeight();
+	    for(int i=0; i< width; i++)
+	    {
+	    	for(int j=0; j<height; j++) 
+	    		{
+	
+	        // Get pixels by R, G, B
+	        alpha = new Color(gamma_cor.getRGB(i, j)).getAlpha();
+	        red = new Color(gamma_cor.getRGB(i, j)).getRed();
+	        green = new Color(gamma_cor.getRGB(i, j)).getGreen();
+	        blue = new Color(gamma_cor.getRGB(i, j)).getBlue();
+	
+	        red = (int) (255 * (Math.pow((double) red / (double) 255, gamma_new)));
+	        green = (int) (255 * (Math.pow((double) green / (double) 255, gamma_new)));
+	        blue = (int) (255 * (Math.pow((double) blue / (double) 255, gamma_new)));
+	
+	        newPixel = (alpha << 24) | (red << 16) | (green << 8) | blue;
+	
+	        gamma_cor.setRGB(i, j, newPixel);
+
+       }
+     }  
+    g2.drawImage(gamma_cor,null,0,0);
+}
+
+	}
 	public class Mean_Removal implements ImageAction {
 		public int amount;
 
@@ -307,6 +353,10 @@ public class EffectsMenu extends JMenu implements ActionListener {
 		mean_removal = new JMenuItem("Mean_Removal");
 		mean_removal.addActionListener(this);
 		add(mean_removal);
+		
+		gamaCor = new JMenuItem("GamaCorrection");
+		gamaCor.addActionListener(this);
+		add(gamaCor);
 
 	}
 	
@@ -353,6 +403,13 @@ public class EffectsMenu extends JMenu implements ActionListener {
 		}
 		if (e.getSource() == mean_removal) {
 			applyAction(new Mean_Removal());
+			return;
+		}
+		
+		if (e.getSource() == gamaCor)
+		{
+			Integer integer = IntegerDialog.getInteger("Fade amount (0-256)",0,256,128,64);
+			if (integer != null) applyAction(new GamaCorrection(integer));
 			return;
 		}
 
