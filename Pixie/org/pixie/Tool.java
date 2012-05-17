@@ -238,8 +238,6 @@ public interface Tool {
 			    if (e.getWhen() - mouseTime < 200) return;
 			
 					if (active != null) active.p2 = e.getPoint();
-					Color c1 = pal.getLeft();
-					Color c2 = pal.getRight();
 		    dragging = false;
 		    int c = JOptionPane.showConfirmDialog(canvas,
 					"Do you really want to crop this image?");
