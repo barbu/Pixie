@@ -291,9 +291,12 @@ public class Pixie implements ActionListener {
 	public boolean doNew() {
 		if (!checkSave())
 			return false;
-		// TODO: Ask for sizes
+
+		Integer ox = IntegerDialog.getInteger("Width:", 0, 4096, 128, 0);
+		Integer oy = IntegerDialog.getInteger("Height:", 0, 4096, 128, 0);
+
 		file = null;
-		BufferedImage img = createWhiteBufferedImage(120, 120);
+		BufferedImage img = createWhiteBufferedImage(ox, oy);
 		canvas.setImage(img);
 		scroll.updateUI();
 		updateTitle();
