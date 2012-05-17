@@ -109,7 +109,7 @@ public class EffectsMenu extends JMenu implements ActionListener {
 			
 			BufferedImage temp = pixie.canvas.getRenderImage();
 			AffineTransform mirrorTransform;
-			mirrorTransform = AffineTransform.getTranslateInstance(temp.getHeight(), 0);
+			mirrorTransform = AffineTransform.getTranslateInstance(temp.getWidth(), 0);
 			mirrorTransform.scale(-1.0, 1.0);
 			BufferedImageOp op  =new AffineTransformOp(mirrorTransform,
 			          AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
