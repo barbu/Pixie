@@ -17,6 +17,7 @@ import java.awt.image.Kernel;
 import java.awt.image.RescaleOp;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
@@ -24,8 +25,9 @@ public class EffectsMenu extends JMenu implements ActionListener
 	{
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
-	JMenuItem blur, value, invert, fade, colorize, histogram, shear, sharpen,emboss,mean_removal,smooth;
-	
+	JMenuItem blur, value, invert, fade, colorize, histogram, shear, sharpen, emboss, mean_removal,
+			smooth;
+
 	public class Blur implements ImageAction
 		{
 		public int amount;
@@ -55,76 +57,68 @@ public class EffectsMenu extends JMenu implements ActionListener
 		}
 
 	public class Mean_Removal implements ImageAction
-	{
-	public int amount;
-
-	
-	public void paint(Graphics g)
 		{
-		Canvas c = pixie.canvas;
-		Graphics2D g2 = (Graphics2D) g;
+		public int amount;
 
-  BufferedImage temp = pixie.canvas.getRenderImage();
+		public void paint(Graphics g)
+			{
+			Canvas c = pixie.canvas;
+			Graphics2D g2 = (Graphics2D) g;
 
-  Kernel kernel = new Kernel(3, 3, new float[] { -1, -1, -1, -1, 9, -1, -1, -1, -1 });
+			BufferedImage temp = pixie.canvas.getRenderImage();
 
-	BufferedImageOp op = new  ConvolveOp(kernel);
-	temp = op.filter(temp, null);
-	    
-	g2.drawImage(c.getRenderImage(),op,0,0);
+			Kernel kernel = new Kernel(3,3,new float[] { -1,-1,-1,-1,9,-1,-1,-1,-1 });
+
+			BufferedImageOp op = new ConvolveOp(kernel);
+			temp = op.filter(temp,null);
+
+			g2.drawImage(c.getRenderImage(),op,0,0);
+			}
 		}
-	}
-	
+
 	public class Smooth implements ImageAction
-	{
-	public int amount;
-
-	
-	public void paint(Graphics g)
 		{
+		public int amount;
+
+		public void paint(Graphics g)
+			{
 			Canvas c = pixie.canvas;
 			Graphics2D g2 = (Graphics2D) g;
 
-	  BufferedImage temp = pixie.canvas.getRenderImage();
-	
-	  Kernel kernel = new  Kernel(3, 3, new  float[] { (float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9,(float)1/9 });
+			BufferedImage temp = pixie.canvas.getRenderImage();
 
-		BufferedImageOp op = new  ConvolveOp(kernel);
-		temp = op.filter(temp, null);
-		    
-		g2.drawImage(c.getRenderImage(),op,0,0);
-		
-		
-		
+			Kernel kernel = new Kernel(3,3,new float[] { (float) 1 / 9,(float) 1 / 9,(float) 1 / 9,
+					(float) 1 / 9,(float) 1 / 9,(float) 1 / 9,(float) 1 / 9,(float) 1 / 9,(float) 1 / 9 });
+
+			BufferedImageOp op = new ConvolveOp(kernel);
+			temp = op.filter(temp,null);
+
+			g2.drawImage(c.getRenderImage(),op,0,0);
+
+			}
 		}
-	}
-	
+
 	public class Emboss implements ImageAction
-	{
-	public int amount;
-
-	
-	public void paint(Graphics g)
 		{
+		public int amount;
+
+		public void paint(Graphics g)
+			{
 			Canvas c = pixie.canvas;
 			Graphics2D g2 = (Graphics2D) g;
 
-	  BufferedImage temp = pixie.canvas.getRenderImage();
-	
-	  Kernel kernel = new Kernel(3, 3,
-		    new float[] {
-		        -2, 0, 0,
-		        0, 1, 0,
-		        0, 0, 2});
+			BufferedImage temp = pixie.canvas.getRenderImage();
 
-		BufferedImageOp op = new  ConvolveOp(kernel);
-		temp = op.filter(temp, null);
-		    
-		g2.drawImage(c.getRenderImage(),op,0,0);
-	
+			Kernel kernel = new Kernel(3,3,new float[] { -2,0,0,0,1,0,0,0,2 });
+
+			BufferedImageOp op = new ConvolveOp(kernel);
+			temp = op.filter(temp,null);
+
+			g2.drawImage(c.getRenderImage(),op,0,0);
+
+			}
 		}
-	}
-	
+
 	public class Value implements ImageAction
 		{
 		public float amount;
@@ -257,7 +251,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 		smooth = new JMenuItem("Smooth");
 		smooth.addActionListener(this);
 		add(smooth);
-		
+
 		emboss = new JMenuItem("Emboss");
 		emboss.addActionListener(this);
 		add(emboss);
@@ -265,7 +259,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 		mean_removal = new JMenuItem("Mean_Removal");
 		mean_removal.addActionListener(this);
 		add(mean_removal);
-		
+
 		}
 
 	public void actionPerformed(ActionEvent e)
@@ -276,7 +270,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 			if (integer != null) applyAction(new Blur(integer));
 			return;
 			}
-		
+
 		if (e.getSource() == smooth)
 			{
 			applyAction(new Smooth());
@@ -292,7 +286,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 			applyAction(new Mean_Removal());
 			return;
 			}
-		
+
 		if (e.getSource() == value)
 			{
 			Integer integer = IntegerDialog.getInteger("Value",-10,10,0,5);
@@ -340,14 +334,19 @@ public class EffectsMenu extends JMenu implements ActionListener
 			int width = temp.getWidth();
 
 			java.awt.image.Raster raster = temp.getRaster();
+			int max = -1;
 			for (int i = 0; i < width; i++)
 				{
 				for (int j = 0; j < height; j++)
 					{
+					int c1 = raster.getSample(i,j,0);
+					int c2 = raster.getSample(i,j,1);
+					int c3 = raster.getSample(i,j,2);
 
-					bins[0][raster.getSample(i,j,0)]++;
-					bins[1][raster.getSample(i,j,1)]++;
-					bins[2][raster.getSample(i,j,2)]++;
+					bins[0][c1]++;
+					bins[1][c2]++;
+					bins[2][c3]++;
+					max = Math.max(max,Math.max(bins[0][c1],Math.max(bins[0][c2],bins[0][c3])));
 					}
 				}
 
@@ -355,7 +354,40 @@ public class EffectsMenu extends JMenu implements ActionListener
 			// TODO Tibi: histogram to photo.
 			// Writing in file
 			 */
-			java.io.FileWriter fstream;
+
+			BufferedImage output = new BufferedImage(255,900,BufferedImage.TYPE_INT_RGB);
+			int rgb = 0;
+			for (int k = 0; k < 3; k++)
+				{
+				for (int i = 0; i < 255; i++)
+					for (int j = 0; j < 300; j++)
+						{
+						//System.out.println(bins[k][i]);
+						if (j < bins[k][i] * 300 / max)
+							{
+							switch (k)
+								{
+								case 0:
+									rgb = (255 << 16) | (0 << 8) | 0;
+									break;
+								case 1:
+									rgb = (0 << 16) | (255 << 8) | 0;
+									break;
+								case 2:
+									rgb = (0 << 16) | (0 << 8) | 255;
+									break;
+								}
+							output.setRGB(i,(k + 1) * 300 - j - 1,rgb);
+							}
+						else
+							{
+							rgb = (255 << 16) | (255 << 8) | 255;
+							output.setRGB(i,(k + 1) * 300 - j - 1,rgb);
+							}
+						}
+				}
+
+			//java.io.FileWriter fstream;
 			try
 				{
 				java.io.File f = pixie.getFile(true);
@@ -365,7 +397,8 @@ public class EffectsMenu extends JMenu implements ActionListener
 					return;
 					}
 
-				fstream = new java.io.FileWriter(f.getAbsoluteFile());
+				ImageIO.write(output,"PNG",f);
+				/*fstream = new java.io.FileWriter(f.getAbsoluteFile());
 				java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
 				for (int i = 0; i < 3; i++)
 					{
@@ -374,7 +407,7 @@ public class EffectsMenu extends JMenu implements ActionListener
 					out.write("\n\r\n");
 					}
 				//Close the output stream
-				out.close();
+				out.close();*/
 				}
 			catch (IOException e1)
 				{
