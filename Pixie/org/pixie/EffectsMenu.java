@@ -23,8 +23,8 @@ import javax.swing.JMenuItem;
 public class EffectsMenu extends JMenu implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	public Pixie pixie;
-	JMenuItem blur, value, invert, fade, colorize, histogram, shear, sharpen,
-			emboss, mean_removal, smooth;
+	JMenuItem blur, value, invert, fade, histogram, shear, sharpen, emboss,
+			mean_removal, smooth;
 
 	public class Blur implements ImageAction {
 		public int amount;
@@ -211,10 +211,6 @@ public class EffectsMenu extends JMenu implements ActionListener {
 		add(fade);
 
 		addSeparator();
-
-		colorize = new JMenuItem("Colorize");
-		colorize.setEnabled(false);
-		add(colorize);
 
 		histogram = new JMenuItem("Histogram");
 		histogram.addActionListener(this);
