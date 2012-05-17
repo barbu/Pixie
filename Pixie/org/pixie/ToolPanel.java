@@ -17,6 +17,7 @@ import org.pixie.Tool.CropTool;
 import org.pixie.Tool.LineTool;
 import org.pixie.Tool.PointTool;
 import org.pixie.Tool.RectangleTool;
+import org.pixie.Tool.SprayTool;
 
 public class ToolPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -42,6 +43,8 @@ public class ToolPanel extends JPanel implements ActionListener {
 				"Fill - flood-fills a region", new FillTool()));
 		addButton(new ToolButton(Pixie.getIcon("cut"),"Crop image",
 				new CropTool()));
+		addButton(new ToolButton(Pixie.getIcon("spray"), "Spray",
+				new SprayTool()));
 		
 		sel.doClick();
 	}

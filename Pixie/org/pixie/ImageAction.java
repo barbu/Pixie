@@ -65,6 +65,97 @@ public interface ImageAction {
 			g.drawLine(p1.x, p1.y, p2.x, p2.y);
 		}
 	}
+	
+	public static class SprayAction implements ImageAction {
+		static final int MAX_FREE_POINTS = 64;
+
+		public Color c;
+		LinkedList<Point> pts = new LinkedList<Point>();
+		BufferedImage cache;
+		int cacheX, cacheY;
+		int minX = Integer.MAX_VALUE, minY = minX, maxX = 0, maxY = 0;
+
+		public SprayAction(Color c) {
+			this.c = c;
+		}
+
+		protected void toCache() {
+			int newMinX = minX;
+			int newMinY = minY;
+			int w = maxX - minX + 1;
+			int h = maxY - minY + 1;
+			if (cache != null) {
+				newMinX = Math.min(minX, cacheX);
+				newMinY = Math.min(minY, cacheY);
+				int newMaxX = Math.max(maxX, cache.getWidth() + cacheX);
+				int newMaxY = Math.max(maxY, cache.getHeight() + cacheY);
+
+				w = newMaxX - newMinX + 1;
+				h = newMaxY - newMinY + 1;
+			}
+
+			BufferedImage newCache = new BufferedImage(w, h,
+					BufferedImage.TYPE_INT_ARGB);
+			Graphics g = newCache.createGraphics();
+			if (cache != null)
+				g.drawImage(cache, cacheX - newMinX, cacheY - newMinY, null);
+			g.setColor(c);
+			LinkedList<Point> spraypts = new LinkedList<Point>();
+			for (Point p : pts)
+			{
+				spraypts.add(new Point(p.x+3,p.y+3));
+				spraypts.add(new Point(p.x-6,p.y+7));
+				spraypts.add(new Point(p.x+10,p.y-5));
+				spraypts.add(new Point(p.x-3,p.y+44));
+			}
+			Point prevPoint = pts.getFirst();
+
+			pts.addAll(spraypts);
+			for (Point p : pts) {
+				g.drawLine(prevPoint.x - newMinX, prevPoint.y - newMinY, p.x
+						- newMinX, p.y - newMinY);
+				prevPoint = p;
+			}
+
+			// reset our vars
+			cache = newCache;
+			cacheX = newMinX;
+			cacheY = newMinY;
+			Point p = pts.getLast();
+			pts.clear();
+			pts.add(p);
+			minX = p.x;
+			minY = p.y;
+			maxX = p.x;
+			maxY = p.y;
+		}
+
+		public void add(Point p) {
+			if (pts.add(p)) {
+				if (p.x < minX)
+					minX = p.x;
+				if (p.y < minY)
+					minY = p.y;
+				if (p.x > maxX)
+					maxX = p.x;
+				if (p.y > maxY)
+					maxY = p.y;
+				if (pts.size() > MAX_FREE_POINTS)
+					toCache();
+			}
+		}
+
+		public void paint(Graphics g) {
+			if (cache != null)
+				g.drawImage(cache, cacheX, cacheY, null);
+			g.setColor(c);
+			Point prevPoint = pts.getFirst();
+			for (Point p : pts) {
+				g.drawLine(prevPoint.x, prevPoint.y, p.x, p.y);
+				prevPoint = p;
+			}
+		}
+	}
 
 	public static class PointAction implements ImageAction {
 		static final int MAX_FREE_POINTS = 64;

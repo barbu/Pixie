@@ -14,6 +14,7 @@ import org.pixie.ImageAction.FillAction;
 import org.pixie.ImageAction.LineAction;
 import org.pixie.ImageAction.PointAction;
 import org.pixie.ImageAction.RectangleAction;
+import org.pixie.ImageAction.SprayAction;
 
 public interface Tool {
 	void mousePress(MouseEvent e, Canvas c, Palette p);
@@ -128,6 +129,38 @@ public interface Tool {
 		}
 	}
 
+	public static class SprayTool extends GenericTool<SprayAction> {
+		public void mousePress(MouseEvent e, Canvas c, Palette p) {
+			if (active != null) {
+				cancel(c);
+				return;
+			}
+			if (!isValid(e, c, p))
+				return;
+			c.active = active = new SprayAction(p.getSelectedColor(e
+					.getButton()));
+			active.add(e.getPoint());
+			c.repaint();
+		}
+
+		public void mouseRelease(MouseEvent e, Canvas c, Palette p) {
+			finish(c, p);
+		}
+
+		public void mouseMove(MouseEvent e, Canvas c, Palette p, boolean drag) {
+			if (active != null && isValid(e, c, null)) {
+				Point pt = e.getPoint();
+				if (!active.pts.isEmpty() && active.pts.getLast().equals(pt))
+					return;
+				Rectangle r = new Rectangle(pt);
+				if (!active.pts.isEmpty())
+					r.add(active.pts.getLast());
+				active.add(pt);
+				c.repaint(r);
+			}
+		}
+	}
+	
 	public static class RectangleTool extends GenericTool<RectangleAction> {
 		long mouseTime;
 		int button;
