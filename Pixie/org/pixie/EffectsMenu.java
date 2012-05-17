@@ -316,7 +316,7 @@ public class EffectsMenu extends JMenu implements ActionListener {
 		blur.addActionListener(this);
 		add(blur);
 
-		value = new JMenuItem("Value");
+		value = new JMenuItem("Contrast");
 		value.addActionListener(this);
 		add(value);
 
