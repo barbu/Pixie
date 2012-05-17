@@ -118,6 +118,29 @@ public class EffectsMenu extends JMenu implements ActionListener {
 		}
 		
 	}
+	
+	public class MirrorOX implements ImageAction {
+		public void paint(Graphics g) {
+			Canvas c = pixie.canvas;
+			Graphics2D g2 = (Graphics2D) g;
+			
+			BufferedImage temp = pixie.canvas.getRenderImage();
+			AffineTransform mirrorTransform;
+			mirrorTransform = AffineTransform.getTranslateInstance(temp.getWidth(), 0);
+			mirrorTransform.scale(-1.0, 1.0);
+			BufferedImageOp op  =new AffineTransformOp(mirrorTransform,
+			          AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			temp = op.filter(temp, null);
+			g2.drawImage(c.getRenderImage(), op, 0, 0);
+			BufferedImageOp op2  =new AffineTransformOp(AffineTransform.getRotateInstance(
+			          Math.PI, 0+temp.getHeight()/2, 0+temp.getWidth()/2),
+			          AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			temp = op2.filter(temp, null);
+			g2.drawImage(c.getRenderImage(), op2, 0, 0);
+		}
+		
+	}
+
 
 	public class Smooth implements ImageAction {
 		public int amount;
@@ -302,6 +325,12 @@ public class EffectsMenu extends JMenu implements ActionListener {
 	public void efectMirror()
 	{
 		applyAction(new Mirror());
+		return;
+	}
+	
+	public void efectMirrorOX()
+	{
+		applyAction(new MirrorOX());
 		return;
 	}
 

@@ -37,7 +37,7 @@ import javax.swing.filechooser.FileFilter;
 public class Pixie implements ActionListener {
 	private final JFrame frame;
 	private JButton bUndo, bZoomIn, bZoomOut, bRotate90Right, bRotate90Left,
-			bMirror;
+			bMirror, bMirrorOx;
 	private JToggleButton bGrid;
 	private final JScrollPane scroll;
 
@@ -133,6 +133,7 @@ public class Pixie implements ActionListener {
 		bRotate90Right = addButton(toolBar, new JButton(getIcon("rotateright")));
 		bRotate90Left = addButton(toolBar, new JButton(getIcon("rotateleft")));
 		bMirror = addButton(toolBar, new JButton(getIcon("mirror")));
+		bMirrorOx = addButton(toolBar, new JButton(getIcon("mirrorox")));
 
 		return toolBar;
 	}
@@ -244,6 +245,10 @@ public class Pixie implements ActionListener {
 		}
 		if (e.getSource() == bRotate90Right) {
 			this.effectsMenu.efectDinMeniuRotateRight();
+			return;
+		}
+		if (e.getSource() == bMirrorOx) {
+			this.effectsMenu.efectMirrorOX();
 			return;
 		}
 		if (e.getSource() == bRotate90Left) {
