@@ -101,6 +101,12 @@ public class Pixie implements ActionListener {
 		effectsMenu=new EffectsMenu(this);
 		//setEffectsMenu();
 		menuBar.add(effectsMenu);
+		JMenu helpMenu=new JMenu("Help");
+		menuBar.add(helpMenu);
+		addMenuItem(helpMenu, "Readme", null);
+		addMenuItem(helpMenu, "Get src", null);
+		addMenuItem(helpMenu, "About", null);
+		menuBar.add(helpMenu);
 		return menuBar;
 	}
 
@@ -295,6 +301,36 @@ public class Pixie implements ActionListener {
 			doClose();
 			return;
 		}
+		if (act.equals("Readme")) {
+			 try {
+		         //Set your page url in this string. For eg, I m using URL for Google Search engine
+		         String url = "README.html";
+		         java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+		       }
+		       catch (java.io.IOException e1) {
+		           System.out.println(e1.getMessage());
+		       }
+			return;
+		}
+		if (act.equals("Get src")) {
+			 try {
+		         //Set your page url in this string. For eg, I m using URL for Google Search engine
+		         String url = "https://github.com/barbu/Pixie/";
+		         java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+		       }
+		       catch (java.io.IOException e1) {
+		           System.out.println(e1.getMessage());
+		       }
+			return;
+		}
+		if (act.equals("About")) {
+			javax.swing.JOptionPane.showMessageDialog(null,
+					"Pixie\n\n Balaban Cristina\n Barbu Tiberiu\n " +
+					"Goga Steliana\n " +
+					"Ilie Valentin\n Radut Rodica \n");
+			return;
+		}
+		
 	}
 
 	public boolean hasChanged() {

@@ -433,7 +433,7 @@ public class EffectsMenu extends JMenu implements ActionListener {
 				e1.printStackTrace();
 			}
 			javax.swing.JOptionPane.showMessageDialog(null,
-					"Histograma a fost salvata!");
+					"Histogram saved!");
 			return;
 		}
 	}
