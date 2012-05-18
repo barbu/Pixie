@@ -1,0 +1,128 @@
+readme e in html
+
+<body>
+
+<pre>
+Interfata 
+
+<img src="EcranPrincipal.jpg" /> 
+
+La deschiderea programului, se va deschide interfata initiala, care contine implicit o imagine preincarcata in sistem.
+Se observa butoanele dedicate pentru principalele functii de editare de fotografii:pencil, line, rectangle, spray, crop, fill.
+Aplicatia suporta si functionalitatile de undo, zoom in/out. 
+Cateva functii speciale de prelucrare a imaginilor se afla in meniul Effects : 
+
+<img src="Effects.jpg" />
+
+</pre>
+
+<pre>
+Pencil
+
+Aceasta functionalitate permite utilizatorului sa deseneze figuri in mod liber.
+<img src="Pencil.jpg" />
+
+cred ca este class PointAction din image Action
+</pre>
+
+<pre>
+Line
+
+Este o functionalitate care permite utilizatorului sa deseneze linii drepte definite prin capetele lor.
+De asemenea, fiecare linie poate fi desenata cu culoarea selectata de utilizator.
+ 
+<img src="Line.jpg" />
+
+Pentru implementarea acestei optiuni s-a utilizat interfata ImageAction, iar desenarea linie se face cu ajutorul a doua puncte 
+preluate de la mouse. 
+
+</pre>
+Rectangle 
+
+Optiune care deseneaza pe ecran un dreptunghi cu marginea de culoarea 1 si interiorul de culoarea 2, ambele culori putand fi alese de catre utilizator.
+
+<img src="Rectangle.jpg" />
+
+Aceasta functionalitate utilizeaza clasa RectangleAction, care implementeaza interfata ImageAction, iar datele de intrare, respectiv culorile dreptunghiului si coordonatele acestuia sunt 
+preluate de la mouse,prin intermediul clasei RectangleTool care mosteneste GenericTool<RectangleAction> .
+ 
+</pre>
+
+<pre>
+
+Fill
+
+Functionalitate cu ajutorul careia se realizeaza umplerea unei zone inchise cu o anumita culoare, selectata de catre utilizator.
+
+<img src="Fill.jpg" />
+
+Pentru implementarea acestei functionalitati s-a creat clasa FillAction care utilizeaza interfata HeavyImageAction si face uz de clasa FloodFill, umplerea zonei dorite facandu-se prin inundare.
+Datele d eintrare, zona care va fi umpluta si culoarea utilizata se preiau cu ajutorul clasei FillTool care extinde clasa GenericTool.
+
+</pre>
+
+<pre>
+Crop
+
+Selectarea si decuparea unei portiuni din imagine. Dupa ce s-a selectat portiunea care se doreste a fi decupata, apare o casuta de dialog care te intreaba daca chiar doresti sa salevezi modificarea.
+
+<img src="Crop.jpg" />
+
+Implementarea acestei functionalitati s-a realizat cu ajutorul clasei CropAction care utilizeaza interfata ImageAction.
+
+</pre>
+
+
+<pre>
+
+Blur
+
+Aceasta functionalitate aplica filtrul de Blur asupra imaginii.
+
+<img  src="x.jpg"  />
+  
+Pentru implementare s-a utilizat clasa Blur car eimplementeaza interfata ImageAction, iar valoarea cu care se realizeaza efectul asupra pozei
+se selecteaza de catre utilizator. Desenarea imaginii asupra carei s-a aplicati filtrul de blur se realizeaza cu ajutorul clasei Kernel initializata cu
+valoarea de blur citita de la input. 
+
+</pre>
+
+<pre>
+Contrast
+
+Functionalitate care permite setarea contrastului asupra imaginii.
+
+<img  src="x.jpg"  />
+
+Contrastul va fi ales de catre utilizator, iar pentru implementarea acestuia s-a creat clasa Value care implementeaza interfata ImageAction,
+iar setarea efectiva a contrastului imaginii se realizeaza cu un obiect de tipul RescaleOp, initializat cu valorile citite de la input. Acest RescaleOP
+actioneaza ca un filtru atunci cand va fi redesenata imaginea. 
+
+</pre>
+
+<pre>
+Invert
+
+Aceasta optiune inverseaza gama cromatica a imaginii. 
+
+<img  src="x.jpg"  />
+
+Pentru implementare s-a creat clasa Invert care implementeaza interfata ImageAction si s-a redesenat imaginea pe canvas
+utilizand un filtru de inversare al culorilor. 
+
+
+</pre>
+
+<pre>
+
+Fade to Black 
+
+<img  src="x.jpg"  />
+
+S-a implementat utilizand clasa Fade care implementeaza interfata ImageAction si seteaza luminozitatea pozei pe baza 
+valorii selectate de catre utilizator. 
+
+</pre>
+
+
+</body>
