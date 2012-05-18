@@ -16,6 +16,7 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.awt.image.RescaleOp;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -459,33 +460,60 @@ public class EffectsMenu extends JMenu implements ActionListener {
 			int width = temp.getWidth();
 
 			java.awt.image.Raster raster = temp.getRaster();
+			int max = -1;
 			for (int i = 0; i < width; i++) {
 				for (int j = 0; j < height; j++) {
 
-					bins[0][raster.getSample(i, j, 0)]++;
-					bins[1][raster.getSample(i, j, 1)]++;
-					bins[2][raster.getSample(i, j, 2)]++;
+					int c1 = raster.getSample(i, j, 0);
+					int c2 = raster.getSample(i, j, 1);
+					int c3 = raster.getSample(i, j, 2);
+					
+					bins[0][c1]++;
+					bins[1][c2]++;
+					bins[2][c3]++;
+					max = Math.max(
+							max,
+							Math.max(bins[0][c1],
+									Math.max(bins[0][c2], bins[0][c3])));
 				}
 			}
+			BufferedImage output = new BufferedImage(255, 900,
+					BufferedImage.TYPE_INT_RGB);
+			int rgb = 0;
+			
+			for (int k = 0; k < 3; k++)
+				for (int i = 0; i < 255; i++)
+					for (int j = 0; j < 300; j++) {
+						 if (j < bins[k][i] * 300 / max) {
+							 switch (k) {
+							 case 0:
+								 rgb = (255 << 16) | (0 << 8) | 0;
+								 break;
+							 case 1:
+								 rgb = (0 << 16) | (255 << 8) | 0;
+								 break;
+							 case 2:
+								 rgb = (0 << 16) | (0 << 8) | 255;
+								 break;
+							 }
+							 output.setRGB(i, (k + 1) * 300 - j - 1, rgb);
+						 } else {
+							 rgb = (255 << 16) | (255 << 8) | 255;
+							 output.setRGB(i, (k + 1) * 300 - j - 1, rgb);
+							 
+							 }
+						 }
 
-			java.io.FileWriter fstream;
+
 			try {
 				java.io.File f = pixie.getFile(true);
 				if (f == null) {
 					javax.swing.JOptionPane.showMessageDialog(null,
 							"You haven't choose any path. Aborting!");
 					return;
+					
 				}
-
-				fstream = new java.io.FileWriter(f.getAbsoluteFile());
-				java.io.BufferedWriter out = new java.io.BufferedWriter(fstream);
-				for (int i = 0; i < 3; i++) {
-					for (int j = 0; j < 256; j++)
-						out.write(bins[i][j] + " ");
-					out.write("\n\r\n");
-				}
-				// Close the output stream
-				out.close();
+				ImageIO.write(output, "PNG", f);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -493,5 +521,6 @@ public class EffectsMenu extends JMenu implements ActionListener {
 					"Histogram saved!");
 			return;
 		}
+		}
 	}
-}
+
